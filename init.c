@@ -6,7 +6,7 @@
 /*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 13:48:12 by jghattas          #+#    #+#             */
-/*   Updated: 2025/04/24 13:48:14 by jghattas         ###   ########.fr       */
+/*   Updated: 2025/04/24 14:35:57 by jghattas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,12 @@ void init_forks(t_fork *forks, int count)
     while (i < count)
 	{
         pthread_mutex_init(&forks[i].mutex, NULL);
-        forks[i].owner = i;
+        forks[i].owner = i + 1;
         forks[i].dirty = 0;
-    }
+		i++;
+	}
+	if (i == count)
+		forks[i].dirty = 1;
 }
 
 void init_philos(t_philo *philos, t_fork *forks, int count, pthread_mutex_t *print_mutex)
@@ -45,5 +48,6 @@ void init_philos(t_philo *philos, t_fork *forks, int count, pthread_mutex_t *pri
         philos[i].left_fork = &forks[i];
         philos[i].right_fork = &forks[(i + 1) % count];
         philos[i].print_mutex = print_mutex;
-    }
+		i++;
+	}
 }

@@ -1,14 +1,14 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   philo.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/24 13:50:01 by jghattas          #+#    #+#             */
-/*   Updated: 2025/04/24 13:50:02 by jghattas         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+
+
+
+
+
+
+
+
+
+
+
 
 #include "philo.h"
 
@@ -56,25 +56,20 @@ void wait_for_forks(t_philo *philo)
 		right_ready = 0;
         pthread_mutex_lock(&philo->left_fork->mutex);
         if (philo->left_fork->owner == philo->id)
-        {
 			left_ready = 1;
-			printf("%d\n", right_ready);
-		}
 		else
             philo->left_fork->requested = 1;
         pthread_mutex_unlock(&philo->left_fork->mutex);
         pthread_mutex_lock(&philo->right_fork->mutex);
         if (philo->right_fork->owner == philo->id)
-        {
 			right_ready = 1;
-			printf("%d\n", right_ready);
-		}
         else
             philo->right_fork->requested = 1;
         pthread_mutex_unlock(&philo->right_fork->mutex);
 
         if (left_ready && right_ready)
             break;
+
         usleep(100);
     }
 }
