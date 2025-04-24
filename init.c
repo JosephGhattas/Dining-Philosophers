@@ -1,21 +1,44 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/24 13:48:12 by jghattas          #+#    #+#             */
+/*   Updated: 2025/04/24 13:48:14 by jghattas         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
-long timestamp_ms(void) {
+long timestamp_ms(void)
+{
     struct timeval tv;
     gettimeofday(&tv, NULL);
     return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }
 
-void init_forks(t_fork *forks, int count) {
-    for (int i = 0; i < count; i++) {
+void init_forks(t_fork *forks, int count)
+{
+	int	i;
+
+	i = 0;
+    while (i < count)
+	{
         pthread_mutex_init(&forks[i].mutex, NULL);
         forks[i].owner = i;
         forks[i].dirty = 0;
     }
 }
 
-void init_philos(t_philo *philos, t_fork *forks, int count, pthread_mutex_t *print_mutex) {
-    for (int i = 0; i < count; i++) {
+void init_philos(t_philo *philos, t_fork *forks, int count, pthread_mutex_t *print_mutex)
+{
+	int	i;
+
+	i = 0;
+    while (i < count)
+	{
         philos[i].id = i + 1;
         philos[i].last_meal_time = timestamp_ms();
         philos[i].meals_eaten = 0;

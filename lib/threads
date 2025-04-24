@@ -42,3 +42,24 @@ pthread_join(thread, NULL);
 
 // Detach a thread (no join required)
 pthread_detach(thread);
+
+
+==========================================================================================
+/*pseudo code
+1. check arg
+	count
+	content
+2. assign each arg to a value
+3. create threads as philos
+	and forks
+4. philo routine
+	eat
+	sleep or think
+		respect time and check for dead philos
+NB: loop as many as requested || till 1 die
+---
+
+
+-------if 1 philo die ---->> stop ----
+
+*/
