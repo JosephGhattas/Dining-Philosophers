@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/24 13:48:29 by jghattas          #+#    #+#             */
-/*   Updated: 2025/04/24 13:48:31 by jghattas         ###   ########.fr       */
+/*   Created: 2025/04/24 13:50:01 by jghattas          #+#    #+#             */
+/*   Updated: 2025/04/24 13:50:02 by jghattas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,12 +84,12 @@ void eat(t_philo *philo)
     print_state(philo, "is eating");
     philo->last_meal_time = timestamp_ms();
     usleep(200 * 1000);
-    philo->meals_eaten++; //increasing the nb of meal eaten
-	//fork 1 -> dirty
+    philo->meals_eaten++; 
+	
     pthread_mutex_lock(&philo->left_fork->mutex);
     philo->left_fork->dirty = 1;
     pthread_mutex_unlock(&philo->left_fork->mutex);
-    //fork 2 -> dirty
+    
 	pthread_mutex_lock(&philo->right_fork->mutex);
     philo->right_fork->dirty = 1;
     pthread_mutex_unlock(&philo->right_fork->mutex);
