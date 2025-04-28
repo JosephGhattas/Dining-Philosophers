@@ -10,7 +10,7 @@ pthread_mutex_lock(&mutex);
 
 // Critical section...
 
-// Unlock (leave critical section)
+// Unlock (leave critical section) 
 pthread_mutex_unlock(&mutex);
 
 // Destroy when done
