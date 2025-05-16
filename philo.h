@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/16 09:46:27 by jghattas          #+#    #+#             */
+/*   Updated: 2025/05/16 12:12:06 by jghattas         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PHILO_H
 # define PHILO_H
 
@@ -8,6 +20,7 @@
 # include <sys/time.h>
 
 # define MAX_PHILOS 250
+
 
 typedef struct s_fork
 {
@@ -23,24 +36,26 @@ typedef struct s_philo
 	t_fork			*left_fork;
 	t_fork			*right_fork;
 	pthread_mutex_t	*print_mutex;
+	pthread_mutex_t *meal_time_mutex;
 	size_t			time_to_die;
 	size_t			time_to_eat;
 	size_t			time_to_sleep;
 	size_t			meals_goal;
 	size_t			meals_eaten;
 	int				died;
+	int				totalnbr;
 }	t_philo;
 
 int		check_arg(int argc, char **argv);
 long	timestamp_ms(void);
 void	init_forks(t_fork *forks, int count);
-void	init_philos(t_philo *philos, t_fork *forks, int count, pthread_mutex_t *print_mutex);
+void	init_philos(t_philo *philos, t_fork *forks,
+		int count, pthread_mutex_t *print_mutex, pthread_mutex_t *meal_time_mutex);
 void	init_philo_params(t_philo *philos, int count, int argc, char **argv);
 
 int		ft_atoi(const char *str);
 void	*philo_routine(void *arg);
-long	timestamp_ms(void);
 void	print_state(t_philo *philo, const char *state);
 void	maybe_give_fork(t_philo *philo, t_fork *fork);
-
+void	*observer(void *arg);
 #endif
