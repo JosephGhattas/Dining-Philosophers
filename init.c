@@ -14,10 +14,16 @@
 
 long	timestamp_ms(void)
 {
+	static long		start_time;
+	long			current_time;
 	struct timeval	tv;
 
+	start_time = 0;
 	gettimeofday(&tv, NULL);
-	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
+	current_time = tv.tv_sec * 1000 + tv.tv_usec / 1000;
+	if (start_time == 0)
+        start_time = current_time;
+    return (current_time - start_time);
 }
 
 void	init_forks(t_fork *forks, int count)
