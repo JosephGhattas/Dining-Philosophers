@@ -37,12 +37,13 @@ typedef struct s_philo
 	t_fork			*right_fork;
 	pthread_mutex_t	*print_mutex;
 	pthread_mutex_t *meal_time_mutex;
+	pthread_mutex_t *died_mutex;
 	size_t			time_to_die;
 	size_t			time_to_eat;
 	size_t			time_to_sleep;
 	size_t			meals_goal;
 	size_t			meals_eaten;
-	int				died;
+	int				*died;
 	int				totalnbr;
 }	t_philo;
 
@@ -51,7 +52,7 @@ long	timestamp_ms(void);
 void	init_forks(t_fork *forks, int count);
 void	init_philos(t_philo *philos, t_fork *forks,
 		int count, pthread_mutex_t *print_mutex, pthread_mutex_t *meal_time_mutex);
-void	init_philo_params(t_philo *philos, int count, int argc, char **argv);
+void	init_philo_params(t_philo *philos, int count, int argc, char **argv, pthread_mutex_t *died_mutex, int *died);
 
 int		ft_atoi(const char *str);
 void	*philo_routine(void *arg);

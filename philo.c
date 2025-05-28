@@ -33,12 +33,15 @@ void *observer(void *arg)
 			curr_time = timestamp_ms();
 			if ((curr_time - philo[i].last_meal_time) >= (size_t)philo[i].time_to_die)
 			{
+				printf("Observer running: checking philo %d\n", i + 1);
+				pthread_mutex_lock(philo[i].died_mutex);
 				pthread_mutex_lock(philo[i].print_mutex);
-				printf("%ld %d died\n", curr_time, philo[i].id);
+				printf("%ld  %d died\n", (long)curr_time, philo[i].id);
 				pthread_mutex_unlock(philo[i].print_mutex);
-				philo[i].died = 1;
+				*(philo[i].died) = 1;
 				pthread_mutex_unlock(philo[i].meal_time_mutex);
-				return NULL;
+				pthread_mutex_unlock(philo[i].died_mutex);
+				return (NULL);
 			}
 			pthread_mutex_unlock(philo[i].meal_time_mutex);
 			i++;
@@ -127,13 +130,21 @@ void	*philo_routine(void *arg)
 	philo = (t_philo *)arg;
 	while (1)
 	{
-		if (philo->died)
+		pthread_mutex_lock(philo->died_mutex);
+		if (*(philo->died) == 1)
+		{
+			pthread_mutex_unlock(philo->died_mutex);
 			break;
-
+		}
+		pthread_mutex_unlock(philo->died_mutex);
 		running_philo(philo);
-
+		pthread_mutex_lock(philo->meal_time_mutex);
 		if (philo->meals_goal > 0 && philo->meals_eaten >= philo->meals_goal)
+		{
+			pthread_mutex_unlock(philo->meal_time_mutex);
 			break;
+		}
+		pthread_mutex_unlock(philo->meal_time_mutex);
 	}
-	return NULL;
+	return (NULL);
 } 

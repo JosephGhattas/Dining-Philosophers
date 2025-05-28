@@ -56,13 +56,12 @@ void	init_philos(t_philo *philos, t_fork *forks, int count,
 		philos[i].right_fork = &forks[(i + 1) % count];
 		philos[i].print_mutex = print_mutex;
 		philos[i].meal_time_mutex = meal_time_mutex;
-		philos[i].died = 0;
 		philos[i].totalnbr = count;
 		i++;
 	}
 }
 
-void	init_philo_params(t_philo *philos, int count, int argc, char **argv)
+void	init_philo_params(t_philo *philos, int count, int argc, char **argv, pthread_mutex_t *died_mutex, int *died)
 {
 	int		i;
 	size_t	time_to_die;
@@ -84,6 +83,8 @@ void	init_philo_params(t_philo *philos, int count, int argc, char **argv)
 		philos[i].time_to_eat = time_to_eat;
 		philos[i].time_to_sleep = time_to_sleep;
 		philos[i].meals_goal = meals_goal;
+		philos[i].died = died;
+		philos[i].died_mutex = died_mutex;
 		i++;
 	}
 }
