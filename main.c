@@ -81,6 +81,7 @@ int	main(int argc, char **argv)
 	pthread_create(&monitor, NULL, observer, (void *)philos);
 	create_threads(threads, philos, count);
 	join_threads(threads, count);
+	pthread_join(monitor, NULL);
 	pthread_mutex_destroy(&print_mutex);
 	pthread_mutex_destroy(&meal_time_mutex);
 	pthread_mutex_destroy(&died_mutex);

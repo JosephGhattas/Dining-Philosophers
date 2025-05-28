@@ -39,8 +39,8 @@ void *observer(void *arg)
 				printf("%ld  %d died\n", (long)curr_time, philo[i].id);
 				pthread_mutex_unlock(philo[i].print_mutex);
 				*(philo[i].died) = 1;
-				pthread_mutex_unlock(philo[i].meal_time_mutex);
 				pthread_mutex_unlock(philo[i].died_mutex);
+				pthread_mutex_unlock(philo[i].meal_time_mutex);
 				return (NULL);
 			}
 			pthread_mutex_unlock(philo[i].meal_time_mutex);
@@ -54,7 +54,7 @@ void *observer(void *arg)
 
 void	get_fork(t_philo *philo, t_fork *fork)
 {
-	if (fork->dirty == 1 && &fork->owner != &philo->id)
+	if (fork->dirty == 1 && fork->owner != philo->id)
 		fork->owner = philo->id;
 }
 
@@ -63,6 +63,8 @@ void	check_forks(t_philo	*philo)
 	int	left_ready;
 	int	right_ready;
 
+	left_ready = 0;
+	right_ready = 0;
 	while (1)
 	{
 		pthread_mutex_lock(&philo->left_fork->mutex);
@@ -115,11 +117,11 @@ void	running_philo(t_philo *philo)
 {
 	think(philo);
 	check_forks(philo);
-	pthread_mutex_lock(&philo->right_fork->mutex);
 	pthread_mutex_lock(&philo->left_fork->mutex);
+	pthread_mutex_lock(&philo->right_fork->mutex);
 	eat(philo);
-	pthread_mutex_unlock(&philo->right_fork->mutex);
 	pthread_mutex_unlock(&philo->left_fork->mutex);
+	pthread_mutex_unlock(&philo->right_fork->mutex);
 	sleep_philo(philo);
 }
 
