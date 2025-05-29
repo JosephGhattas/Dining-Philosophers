@@ -35,10 +35,9 @@ void	init_forks(t_fork *forks, int count)
 	{
 		pthread_mutex_init(&forks[i].mutex, NULL);
 		forks[i].owner = i + 1;
-		forks[i].dirty = 0;
+		forks[i].dirty = 1;
 		i++;
 	}
-	forks[count - 1].dirty = 1;
 }
 
 void	init_philos(t_philo *philos, t_fork *forks, int count,
@@ -69,7 +68,7 @@ void	init_philo_params(t_philo *philos, int count, int argc, char **argv, pthrea
 	size_t	time_to_sleep;
 	size_t	meals_goal;
 
-	time_to_die = ft_atoi(argv[2]) * 1000;
+	time_to_die = ft_atoi(argv[2]);
 	time_to_eat = ft_atoi(argv[3]) * 1000;
 	time_to_sleep = ft_atoi(argv[4]) * 1000;
 	if (argc == 6)
