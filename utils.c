@@ -6,7 +6,7 @@
 /*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 14:32:50 by jghattas          #+#    #+#             */
-/*   Updated: 2025/04/24 11:39:10 by jghattas         ###   ########.fr       */
+/*   Updated: 2025/05/30 14:27:36 by jghattas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,3 +36,8 @@ int	ft_atoi(const char *str)
 	}
 	return (result * sign);
 }
+
+// int	check_dead(t_philo philo)
+// {
+// 	return (1);
+// }

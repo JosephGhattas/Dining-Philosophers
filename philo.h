@@ -6,7 +6,7 @@
 /*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 09:46:27 by jghattas          #+#    #+#             */
-/*   Updated: 2025/05/16 12:12:06 by jghattas         ###   ########.fr       */
+/*   Updated: 2025/05/30 14:27:24 by jghattas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,4 +59,12 @@ void	*philo_routine(void *arg);
 void	print_state(t_philo *philo, const char *state);
 void	maybe_give_fork(t_philo *philo, t_fork *fork);
 void	*observer(void *arg);
+
+void	get_fork(t_philo *philo, t_fork *fork);
+void	check_forks(t_philo	*philo);
+void	smart_sleep(long duration_us, t_philo *philo);
+void	eat(t_philo *philo);
+void	think(t_philo *philo);
+void	sleep_philo(t_philo *philo);
+
 #endif

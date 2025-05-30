@@ -6,7 +6,7 @@
 /*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 13:48:12 by jghattas          #+#    #+#             */
-/*   Updated: 2025/05/16 12:10:45 by jghattas         ###   ########.fr       */
+/*   Updated: 2025/05/30 14:47:54 by jghattas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	init_philo_params(t_philo *philos, int count, int argc, char **argv, pthrea
 	size_t	time_to_sleep;
 	size_t	meals_goal;
 
-	time_to_die = ft_atoi(argv[2]);
+	time_to_die = ft_atoi(argv[2]) * 1000;
 	time_to_eat = ft_atoi(argv[3]) * 1000;
 	time_to_sleep = ft_atoi(argv[4]) * 1000;
 	if (argc == 6)

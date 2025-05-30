@@ -6,7 +6,7 @@
 /*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 13:47:58 by jghattas          #+#    #+#             */
-/*   Updated: 2025/05/16 12:09:40 by jghattas         ###   ########.fr       */
+/*   Updated: 2025/05/30 14:24:08 by jghattas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,20 @@ int	check_arg(int argc, char **argv)
 	return (0);
 }
 
+void	create_mutexes(pthread_mutex_t *print_mutex, pthread_mutex_t *meal_time_mutex, pthread_mutex_t *died_mutex)
+{
+	pthread_mutex_init(print_mutex, NULL);
+	pthread_mutex_init(meal_time_mutex, NULL);
+	pthread_mutex_init(died_mutex, NULL);
+	
+}
+
+void	delete_mutexes(pthread_mutex_t *print_mutex, pthread_mutex_t *meal_time_mutex, pthread_mutex_t *died_mutex)
+{
+	pthread_mutex_destroy(print_mutex);
+	pthread_mutex_destroy(meal_time_mutex);
+	pthread_mutex_destroy(died_mutex);
+}
 void	create_threads(pthread_t *threads, t_philo *philos, int count)
 {
 	int	i;
@@ -72,9 +86,7 @@ int	main(int argc, char **argv)
 	if (check_arg(argc, argv) == 1)
 		return (printf ("Wrong Arguments Syntax\n"));
 	count = ft_atoi(argv[1]);
-	pthread_mutex_init(&print_mutex, NULL);
-	pthread_mutex_init(&meal_time_mutex, NULL);
-	pthread_mutex_init(&died_mutex, NULL);
+	create_mutexes(&print_mutex, &meal_time_mutex, &died_mutex);
 	init_forks(forks, count);
 	init_philos(philos, forks, count, &print_mutex, &meal_time_mutex);
 	init_philo_params(philos, count, argc, argv, &died_mutex, &died);
@@ -82,9 +94,6 @@ int	main(int argc, char **argv)
 	create_threads(threads, philos, count);
 	join_threads(threads, count);
 	pthread_join(monitor, NULL);
-	pthread_mutex_destroy(&print_mutex);
-	pthread_mutex_destroy(&meal_time_mutex);
-	pthread_mutex_destroy(&died_mutex);
-	
+	delete_mutexes(&print_mutex, &meal_time_mutex, &died_mutex);
 	return (0);
 }

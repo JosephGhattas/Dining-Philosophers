@@ -6,7 +6,7 @@
 /*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 09:04:02 by jghattas          #+#    #+#             */
-/*   Updated: 2025/05/16 12:20:04 by jghattas         ###   ########.fr       */
+/*   Updated: 2025/05/30 14:28:23 by jghattas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	print_state(t_philo *philo, const char *state)
 	printf("%ld ms Philospher %d %s\n", timestamp_ms(), philo->id, state);
 	pthread_mutex_unlock(philo->print_mutex);
 }
+
 void *observer(void *arg)
 {
 	t_philo *philo = (t_philo *)arg;
@@ -59,95 +60,6 @@ void *observer(void *arg)
 			i++;
 		}
 	}
-}
-
-void	get_fork(t_philo *philo, t_fork *fork)
-{
-	if (fork->dirty == 1 && fork->owner != philo->id)
-		fork->owner = philo->id;
-}
-
-void	check_forks(t_philo	*philo)
-{
-	int	left_ready;
-	int	right_ready;
-
-	left_ready = 0;
-	right_ready = 0;
-	while (1)
-	{
-		pthread_mutex_lock(philo->died_mutex);
-        if (*philo->died) {
-            pthread_mutex_unlock(philo->died_mutex);
-            return;
-        }
-        pthread_mutex_unlock(philo->died_mutex);
-		if (philo->left_fork->owner == philo->id)
-			left_ready = 1;
-		else if (philo->left_fork->dirty == 1)
-			get_fork(philo, philo->left_fork);
-		pthread_mutex_unlock(&philo->left_fork->mutex);
-		pthread_mutex_lock(&philo->right_fork->mutex);
-		if (philo->right_fork->owner == philo->id)
-			right_ready = 1;
-		else if (philo->right_fork->dirty == 1)
-			get_fork(philo, philo->right_fork);
-		pthread_mutex_unlock(&philo->right_fork->mutex);
-		if (left_ready == 1 && right_ready == 1)
-		{
-			print_state(philo, "has both forks");
-			right_ready = 0;
-			left_ready = 0;
-			break ;
-		}
-	}
-}
-
-void smart_sleep(long duration_us, t_philo *philo) {
-    long start = timestamp_ms() * 1000;  // ms → μs
-    long elapsed;
-    
-    while ((elapsed = (timestamp_ms() * 1000 - start)) < duration_us) {
-        usleep(500);  // Half the check interval
-        pthread_mutex_lock(philo->died_mutex);
-        if (*philo->died) {
-            pthread_mutex_unlock(philo->died_mutex);
-            return;
-        }
-        pthread_mutex_unlock(philo->died_mutex);
-    }
-}
-
-void	eat(t_philo *philo)
-{
-	pthread_mutex_lock(philo->meal_time_mutex);
-	philo->last_meal_time = timestamp_ms();
-	pthread_mutex_unlock(philo->meal_time_mutex);
-	print_state(philo, "is eating");
-	pthread_mutex_lock(philo->meal_time_mutex);
-	philo->meals_eaten++;
-	pthread_mutex_unlock(philo->meal_time_mutex);
-	philo->left_fork->dirty = 1;
-	philo->right_fork->dirty = 1;
-	smart_sleep(philo->time_to_eat, philo);
-}
-
-void	think(t_philo *philo)
-{
-	 pthread_mutex_lock(philo->died_mutex);
-    if (*philo->died) {
-        pthread_mutex_unlock(philo->died_mutex);
-        return;
-    }
-    pthread_mutex_unlock(philo->died_mutex);
-	print_state(philo, "is thinking");
-	usleep(100);
-}
-
-void	sleep_philo(t_philo *philo)
-{
-	print_state(philo, "is sleeping");
-	smart_sleep(philo->time_to_sleep, philo);
 }
 
 void	running_philo(t_philo *philo)
