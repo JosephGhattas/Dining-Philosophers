@@ -6,7 +6,7 @@
 /*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 09:04:02 by jghattas          #+#    #+#             */
-/*   Updated: 2025/05/30 14:28:23 by jghattas         ###   ########.fr       */
+/*   Updated: 2025/05/30 19:56:17 by jghattas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,12 @@
 void	print_state(t_philo *philo, const char *state)
 {
 	pthread_mutex_lock(philo->died_mutex);
-    if (*philo->died) {
-        pthread_mutex_unlock(philo->died_mutex);
-        return;
-    }
-    pthread_mutex_unlock(philo->died_mutex);
+	if (*(philo->died) == 1)
+	{
+		pthread_mutex_unlock(philo->died_mutex);
+		return ;
+	}
+	pthread_mutex_unlock(philo->died_mutex);
 	pthread_mutex_lock(philo->print_mutex);
 	printf("%ld ms Philospher %d %s\n", timestamp_ms(), philo->id, state);
 	pthread_mutex_unlock(philo->print_mutex);
@@ -28,10 +29,9 @@ void	print_state(t_philo *philo, const char *state)
 void *observer(void *arg)
 {
 	t_philo *philo = (t_philo *)arg;
-	long curr_time;
 	const int count = philo[0].totalnbr;
 	int i;
-	size_t time_since_meal;
+	int	flag;
 
 	while (1)
 	{
@@ -40,26 +40,16 @@ void *observer(void *arg)
 		while (i < count)
 		{
 			pthread_mutex_lock(philo[i].meal_time_mutex);
-			curr_time = timestamp_ms();
-			time_since_meal = curr_time - philo[i].last_meal_time;
-			if (time_since_meal > philo[i].time_to_die)
-			{
-				pthread_mutex_lock(philo[i].died_mutex);
-				if (*philo[i].died == 0)
-                {
-                    *philo[i].died = 1;
-                    pthread_mutex_lock(philo[i].print_mutex);
-                    printf("%ld %d died\n", curr_time, philo[i].id);
-                    pthread_mutex_unlock(philo[i].print_mutex);
-                }
-				pthread_mutex_unlock(philo[i].died_mutex);
-				pthread_mutex_unlock(philo[i].meal_time_mutex);
-				return (NULL);
-			}
+			flag = check_dead(philo, i);
 			pthread_mutex_unlock(philo[i].meal_time_mutex);
+			if (flag == 1)
+				break;
 			i++;
 		}
+		if (flag == 1)
+			break;
 	}
+	return(NULL);
 }
 
 void	running_philo(t_philo *philo)
@@ -89,6 +79,7 @@ void	*philo_routine(void *arg)
 	philo = (t_philo *)arg;
 	while (1)
 	{
+		running_philo(philo);
 		pthread_mutex_lock(philo->died_mutex);
 		if (*(philo->died) == 1)
 		{
@@ -96,12 +87,11 @@ void	*philo_routine(void *arg)
 			break;
 		}
 		pthread_mutex_unlock(philo->died_mutex);
-		running_philo(philo);
 		pthread_mutex_lock(philo->meal_time_mutex);
 		if (philo->meals_goal > 0 && philo->meals_eaten >= philo->meals_goal)
 		{
 			pthread_mutex_unlock(philo->meal_time_mutex);
-			break;
+			break ;
 		}
 		pthread_mutex_unlock(philo->meal_time_mutex);
 	}

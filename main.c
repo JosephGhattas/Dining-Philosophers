@@ -6,7 +6,7 @@
 /*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 13:47:58 by jghattas          #+#    #+#             */
-/*   Updated: 2025/05/30 14:24:08 by jghattas         ###   ########.fr       */
+/*   Updated: 2025/05/30 20:16:14 by jghattas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ void	join_threads(pthread_t *threads, int count)
 		pthread_join(threads[i], NULL);
 		i++;
 	}
+	
 }
 
 int	main(int argc, char **argv)
@@ -90,10 +91,13 @@ int	main(int argc, char **argv)
 	init_forks(forks, count);
 	init_philos(philos, forks, count, &print_mutex, &meal_time_mutex);
 	init_philo_params(philos, count, argc, argv, &died_mutex, &died);
-	pthread_create(&monitor, NULL, observer, (void *)philos);
 	create_threads(threads, philos, count);
+	pthread_create(&monitor, NULL, observer, (void *)philos);
 	join_threads(threads, count);
 	pthread_join(monitor, NULL);
 	delete_mutexes(&print_mutex, &meal_time_mutex, &died_mutex);
 	return (0);
 }
+//note to fix arg_check for for example ./philo 2a 200 200b 200 2 it should not work but it does
+//./philo 1 800 200 200 in this case no second fork goes into infinite loop to fix!!
+// to fix timing issues during death ./philo 3 60 60 60 no deaths t should happen check deepseek

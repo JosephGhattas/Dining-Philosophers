@@ -6,7 +6,7 @@
 /*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 14:07:51 by jghattas          #+#    #+#             */
-/*   Updated: 2025/05/30 14:42:05 by jghattas         ###   ########.fr       */
+/*   Updated: 2025/05/30 18:57:26 by jghattas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,13 @@ void	smart_sleep(long duration_us, t_philo *philo)
     long start = timestamp_ms();
     long elapsed;
     
-    while ((elapsed = (timestamp_ms() - start)) < duration_us)
+    while ((elapsed = timestamp_ms() - start) < duration_us)
 	{
-        usleep(500);
         pthread_mutex_lock(philo->died_mutex);
-        if (*philo->died) {
+        if (*philo->died)
+		{
             pthread_mutex_unlock(philo->died_mutex);
-            return;
+            return ;
         }
         pthread_mutex_unlock(philo->died_mutex);
     }
@@ -83,6 +83,9 @@ void	eat(t_philo *philo)
 	philo->left_fork->dirty = 1;
 	philo->right_fork->dirty = 1;
 	smart_sleep(philo->time_to_eat, philo);
+	pthread_mutex_lock(philo->meal_time_mutex);
+	philo->last_meal_time = timestamp_ms();
+	pthread_mutex_unlock(philo->meal_time_mutex);
 }
 
 void	think(t_philo *philo)
@@ -95,7 +98,6 @@ void	think(t_philo *philo)
     }
     pthread_mutex_unlock(philo->died_mutex);
 	print_state(philo, "is thinking");
-	usleep(100);
 }
 
 void	sleep_philo(t_philo *philo)

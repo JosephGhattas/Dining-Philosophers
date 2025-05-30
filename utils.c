@@ -6,7 +6,7 @@
 /*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 14:32:50 by jghattas          #+#    #+#             */
-/*   Updated: 2025/05/30 14:27:36 by jghattas         ###   ########.fr       */
+/*   Updated: 2025/05/30 19:04:17 by jghattas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,31 @@ int	ft_atoi(const char *str)
 	return (result * sign);
 }
 
-// int	check_dead(t_philo philo)
-// {
-// 	return (1);
-// }
+int	check_dead(t_philo *philo, int i)
+{
+	size_t	curr_time;
+	size_t	time_since_meal;
+
+	curr_time = timestamp_ms();
+	time_since_meal = curr_time - philo[i].last_meal_time;
+	if (time_since_meal > philo[i].time_to_die)
+	{
+		pthread_mutex_lock(philo[i].died_mutex);
+		if (*philo[i].died == 0)
+        {
+        	*philo[i].died = 1;
+            pthread_mutex_lock(philo[i].print_mutex);
+        	printf("%ld %d died\n", curr_time, philo[i].id);
+        	pthread_mutex_unlock(philo[i].print_mutex);
+			pthread_mutex_unlock(philo[i].died_mutex);
+			return (1);
+    	}
+		pthread_mutex_unlock(philo[i].died_mutex);
+	}
+	if (philo->meals_goal > 0 && philo->meals_eaten >= philo->meals_goal)
+	{
+		pthread_mutex_unlock(philo->meal_time_mutex);
+		return (1);
+	}
+	return (0);
+}

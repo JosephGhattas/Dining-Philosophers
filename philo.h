@@ -6,7 +6,7 @@
 /*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 09:46:27 by jghattas          #+#    #+#             */
-/*   Updated: 2025/05/30 14:27:24 by jghattas         ###   ########.fr       */
+/*   Updated: 2025/05/30 16:12:51 by jghattas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,5 +66,7 @@ void	smart_sleep(long duration_us, t_philo *philo);
 void	eat(t_philo *philo);
 void	think(t_philo *philo);
 void	sleep_philo(t_philo *philo);
+
+int	check_dead(t_philo *philo, int i);
 
 #endif
