@@ -6,7 +6,7 @@
 /*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 09:04:02 by jghattas          #+#    #+#             */
-/*   Updated: 2025/06/05 14:41:02 by jghattas         ###   ########.fr       */
+/*   Updated: 2025/06/05 16:39:02 by jghattas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,28 +21,29 @@ void	print_state(t_philo *philo, const char *state)
 	pthread_mutex_unlock(&philo->mutexes->print_mutex);
 }
 
-void *observer(void *arg)
+void	*observer(void *arg)
 {
-	t_philo *philo = (t_philo *)arg;
-	const int count = philo[0].totalnbr;
-	int i;
-	int	flag;
+	t_philo	*philo;
+	int		count;
+	int		i;
+	int		flag;
 
+	philo = (t_philo *)arg;
+	count = philo[0].totalnbr;
 	while (1)
 	{
 		i = 0;
 		while (i < count)
 		{
-			
 			flag = check_dead(philo, i);
 			if (flag == 1)
-				break;
+				break ;
 			i++;
 		}
 		if (flag == 1)
-			break;
+			break ;
 	}
-	return(NULL);
+	return (NULL);
 }
 
 void	running_philo(t_philo *philo)
@@ -52,16 +53,16 @@ void	running_philo(t_philo *philo)
 		return ;
 	if (philo->id % 2 == 0)
 	{
-    	pthread_mutex_lock(&philo->left_fork->mutex);
+		pthread_mutex_lock(&philo->left_fork->mutex);
 		print_state(philo, "has taken left fork");
-    	pthread_mutex_lock(&philo->right_fork->mutex);
+		pthread_mutex_lock(&philo->right_fork->mutex);
 		print_state(philo, "has taken right fork");
 	}
 	else
 	{
 		pthread_mutex_lock(&philo->right_fork->mutex);
 		print_state(philo, "has taken right fork");
-    	pthread_mutex_lock(&philo->left_fork->mutex);
+		pthread_mutex_lock(&philo->left_fork->mutex);
 		print_state(philo, "has taken left fork");
 	}
 	eat(philo);
@@ -78,7 +79,7 @@ void	*philo_routine(void *arg)
 	while (1)
 	{
 		if (is_dead(philo) == -1)
-			break;
+			break ;
 		running_philo(philo);
 		pthread_mutex_lock(&philo->meal_time_mutex);
 		if (philo->meals_goal > 0 && philo->meals_eaten >= philo->meals_goal)
@@ -89,4 +90,4 @@ void	*philo_routine(void *arg)
 		pthread_mutex_unlock(&philo->meal_time_mutex);
 	}
 	return (NULL);
-} 
+}

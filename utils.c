@@ -6,7 +6,7 @@
 /*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 14:32:50 by jghattas          #+#    #+#             */
-/*   Updated: 2025/06/05 15:35:53 by jghattas         ###   ########.fr       */
+/*   Updated: 2025/06/05 16:50:20 by jghattas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,14 +52,14 @@ int	check_dead(t_philo *philo, int i)
 	{
 		pthread_mutex_lock(&philo[i].mutexes->died_mutex);
 		if ((*(philo->died)) == 0)
-        {
-        	*(philo->died) = 1;
-            pthread_mutex_lock(&philo[i].mutexes->print_mutex);
-        	printf("%ld ms philosopher %d died\n", curr_time, philo[i].id);
-        	pthread_mutex_unlock(&philo[i].mutexes->print_mutex);
+		{
+			*(philo->died) = 1;
+			pthread_mutex_lock(&philo[i].mutexes->print_mutex);
+			printf("%ld ms philosopher %d died\n", curr_time, philo[i].id);
+			pthread_mutex_unlock(&philo[i].mutexes->print_mutex);
 			pthread_mutex_unlock(&philo[i].mutexes->died_mutex);
 			return (1);
-    	}
+		}
 		pthread_mutex_unlock(&philo[i].mutexes->died_mutex);
 	}
 	pthread_mutex_lock(&philo[i].meal_time_mutex);

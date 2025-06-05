@@ -6,25 +6,11 @@
 /*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 13:48:12 by jghattas          #+#    #+#             */
-/*   Updated: 2025/06/05 15:27:44 by jghattas         ###   ########.fr       */
+/*   Updated: 2025/06/05 16:34:36 by jghattas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-long	timestamp_ms(void)
-{
-	static long		start_time = 0;
-	long			current_time;
-	struct timeval	tv;
-
-	gettimeofday(&tv, NULL);
-	current_time = tv.tv_sec * 1000 + tv.tv_usec / 1000;
-	if (start_time == 0)
-		start_time = current_time;
-	// printf("\ntime === %ld\n\n", current_time - start_time);
-	return (current_time - start_time);
-}
 
 void	init_forks(t_fork *forks, int count)
 {

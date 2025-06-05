@@ -6,7 +6,7 @@
 /*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 09:46:27 by jghattas          #+#    #+#             */
-/*   Updated: 2025/06/05 15:25:16 by jghattas         ###   ########.fr       */
+/*   Updated: 2025/06/05 16:44:28 by jghattas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 
 # define MAX_PHILOS 250
 
-
 typedef struct s_fork
 {
 	pthread_mutex_t	mutex;
@@ -29,7 +28,7 @@ typedef struct s_fork
 
 typedef struct s_mutexes
 {
-	pthread_mutex_t died_mutex;
+	pthread_mutex_t	died_mutex;
 	pthread_mutex_t	print_mutex;
 }	t_mutexes;
 
@@ -40,7 +39,7 @@ typedef struct s_philo
 	t_fork			*left_fork;
 	t_fork			*right_fork;
 	t_mutexes		*mutexes;
-	pthread_mutex_t meal_time_mutex;
+	pthread_mutex_t	meal_time_mutex;
 	size_t			time_to_die;
 	size_t			time_to_eat;
 	size_t			time_to_sleep;
@@ -52,24 +51,25 @@ typedef struct s_philo
 
 int		check_arg(int argc, char **argv);
 long	timestamp_ms(void);
+int		ft_atoi(const char *str);
+void	print_state(t_philo *philo, const char *state);
+
 void	init_forks(t_fork *forks, int count);
 void	init_philos(t_philo *philos, t_fork *forks, int count, int *dead);
 void	init_philo_params(t_philo *philos, int count, int argc, char **argv);
+
 void	init_mutexes(t_philo *philo, t_mutexes *mutexes, int count);
-int		ft_atoi(const char *str);
+void	destroy_mutexes(t_philo *philo, t_mutexes *mutexes, int count);
+
 void	*philo_routine(void *arg);
-void	print_state(t_philo *philo, const char *state);
-void	maybe_give_fork(t_philo *philo, t_fork *fork);
+
 void	*observer(void *arg);
 
-void	get_fork(t_philo *philo, t_fork *fork);
-void	check_forks(t_philo	*philo);
-void	smart_sleep(long duration, t_philo *philo);
 void	eat(t_philo *philo);
 void	think(t_philo *philo);
 void	sleep_philo(t_philo *philo);
 
 int		check_dead(t_philo *philo, int i);
-void	destroy_mutexes(t_philo *philo, t_mutexes *mutexes, int count);
 int		is_dead(t_philo *philo);
+
 #endif

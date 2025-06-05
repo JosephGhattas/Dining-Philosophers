@@ -6,7 +6,7 @@
 /*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 13:47:58 by jghattas          #+#    #+#             */
-/*   Updated: 2025/06/05 15:19:19 by jghattas         ###   ########.fr       */
+/*   Updated: 2025/06/05 16:35:03 by jghattas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ void	join_threads(pthread_t *threads, int count)
 		pthread_join(threads[i], NULL);
 		i++;
 	}
-	
 }
 
 int	main(int argc, char **argv)
