@@ -6,12 +6,11 @@
 /*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 13:48:12 by jghattas          #+#    #+#             */
-/*   Updated: 2025/06/05 11:02:32 by jghattas         ###   ########.fr       */
+/*   Updated: 2025/06/05 11:30:47 by jghattas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
 
 long	timestamp_ms(void)
 {
@@ -50,8 +49,6 @@ void	init_philos(t_philo *philos, t_fork *forks, int count)
 		philos[i].meals_eaten = 0;
 		philos[i].left_fork = &forks[i];
 		philos[i].right_fork = &forks[(i + 1) % count];
-		// philos[i].print_mutex = print_mutex;
-		// philos[i].meal_time_mutex = meal_time_mutex;
 		philos[i].totalnbr = count;
 		i++;
 	}
@@ -86,12 +83,11 @@ void	init_philo_params(t_philo *philos, int count, int argc, char **argv)
 
 void	init_mutexes(t_philo *philo, t_mutexes *mutexes, int count)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while ( i < count)
+	while (i < count)
 	{
-		
 		pthread_mutex_init(&philo[i].meal_time_mutex, NULL);
 		philo[i].mutexes = mutexes;
 		i++;
@@ -102,12 +98,11 @@ void	init_mutexes(t_philo *philo, t_mutexes *mutexes, int count)
 
 void	destroy_mutexes(t_philo *philo, t_mutexes *mutexes, int count)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while ( i < count)
+	while (i < count)
 	{
-		
 		pthread_mutex_destroy(&philo[i].meal_time_mutex);
 		i++;
 	}
