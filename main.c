@@ -6,7 +6,7 @@
 /*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 13:47:58 by jghattas          #+#    #+#             */
-/*   Updated: 2025/06/05 11:23:29 by jghattas         ###   ########.fr       */
+/*   Updated: 2025/06/05 11:42:12 by jghattas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,9 @@ int	main(int argc, char **argv)
 	t_philo			philos[MAX_PHILOS];
 	t_fork			forks[MAX_PHILOS];
 	t_mutexes		mutexes;
-	// pthread_t		monitor;
+	pthread_t		monitor;
 	int				count;
-	// int				died;
 
-	// died = 0;
 	if (check_arg(argc, argv) != 0)
 		return (printf ("Wrong Arguments Syntax\n"));
 	count = ft_atoi(argv[1]);
@@ -78,10 +76,9 @@ int	main(int argc, char **argv)
 	init_philos(philos, forks, count);
 	init_philo_params(philos, count, argc, argv);
 	create_threads(threads, philos, count);
-	// pthread_create(&monitor, NULL, observer, (void *)philos);
+	pthread_create(&monitor, NULL, observer, (void *)philos);
 	join_threads(threads, count);
-	// pthread_join(monitor, NULL);
+	pthread_join(monitor, NULL);
 	destroy_mutexes(philos, &mutexes, count);
-	printf("hi");
 	return (0);
 }

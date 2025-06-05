@@ -6,7 +6,7 @@
 /*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 14:32:50 by jghattas          #+#    #+#             */
-/*   Updated: 2025/06/05 11:04:16 by jghattas         ###   ########.fr       */
+/*   Updated: 2025/06/05 14:39:31 by jghattas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,9 @@ int	check_dead(t_philo *philo, int i)
 	size_t	time_since_meal;
 
 	curr_time = timestamp_ms();
+	pthread_mutex_lock(&philo[i].meal_time_mutex);
 	time_since_meal = curr_time - philo[i].last_meal_time;
+	pthread_mutex_unlock(&philo[i].meal_time_mutex);
 	if (time_since_meal > philo[i].time_to_die)
 	{
 		pthread_mutex_lock(&philo[i].mutexes->died_mutex);
@@ -53,7 +55,7 @@ int	check_dead(t_philo *philo, int i)
         {
         	philo[i].died = 1;
             pthread_mutex_lock(&philo[i].mutexes->print_mutex);
-        	printf("%ld %d died\n", curr_time, philo[i].id);
+        	printf("%ld ms philosopher %d died\n", curr_time, philo[i].id);
         	pthread_mutex_unlock(&philo[i].mutexes->print_mutex);
 			pthread_mutex_unlock(&philo[i].mutexes->died_mutex);
 			return (1);
@@ -65,5 +67,17 @@ int	check_dead(t_philo *philo, int i)
 		pthread_mutex_unlock(&philo->meal_time_mutex);
 		return (1);
 	}
+	return (0);
+}
+
+int	is_dead(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->mutexes->died_mutex);
+	if ((philo->died) == 1)
+	{
+		pthread_mutex_unlock(&philo->mutexes->died_mutex);
+		return (-1);
+	}
+	pthread_mutex_unlock(&philo->mutexes->died_mutex);
 	return (0);
 }

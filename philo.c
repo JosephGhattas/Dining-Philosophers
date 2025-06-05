@@ -6,7 +6,7 @@
 /*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 09:04:02 by jghattas          #+#    #+#             */
-/*   Updated: 2025/06/05 11:21:20 by jghattas         ###   ########.fr       */
+/*   Updated: 2025/06/05 14:41:02 by jghattas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,8 @@
 
 void	print_state(t_philo *philo, const char *state)
 {
-	pthread_mutex_lock(&philo->mutexes->died_mutex);
-	if (philo->died == 1)
-	{
-		pthread_mutex_unlock(&philo->mutexes->died_mutex);
+	if (is_dead(philo) == -1)
 		return ;
-	}
-	pthread_mutex_unlock(&philo->mutexes->died_mutex);
 	pthread_mutex_lock(&philo->mutexes->print_mutex);
 	printf("%ld ms Philospher %d %s\n", timestamp_ms(), philo->id, state);
 	pthread_mutex_unlock(&philo->mutexes->print_mutex);
@@ -35,13 +30,11 @@ void *observer(void *arg)
 
 	while (1)
 	{
-		usleep(1000);
 		i = 0;
 		while (i < count)
 		{
-			pthread_mutex_lock(&philo[i].meal_time_mutex);
+			
 			flag = check_dead(philo, i);
-			pthread_mutex_unlock(&philo[i].meal_time_mutex);
 			if (flag == 1)
 				break;
 			i++;
@@ -55,16 +48,21 @@ void *observer(void *arg)
 void	running_philo(t_philo *philo)
 {
 	think(philo);
-	check_forks(philo);
+	if (is_dead(philo) == -1)
+		return ;
 	if (philo->id % 2 == 0)
 	{
     	pthread_mutex_lock(&philo->left_fork->mutex);
+		print_state(philo, "has taken left fork");
     	pthread_mutex_lock(&philo->right_fork->mutex);
+		print_state(philo, "has taken right fork");
 	}
 	else
 	{
 		pthread_mutex_lock(&philo->right_fork->mutex);
+		print_state(philo, "has taken right fork");
     	pthread_mutex_lock(&philo->left_fork->mutex);
+		print_state(philo, "has taken left fork");
 	}
 	eat(philo);
 	pthread_mutex_unlock(&philo->left_fork->mutex);
@@ -79,14 +77,9 @@ void	*philo_routine(void *arg)
 	philo = (t_philo *)arg;
 	while (1)
 	{
-		running_philo(philo);
-		pthread_mutex_lock(&philo->mutexes->died_mutex);
-		if ((philo->died) == 1)
-		{
-			pthread_mutex_unlock(&philo->mutexes->died_mutex);
+		if (is_dead(philo) == -1)
 			break;
-		}
-		pthread_mutex_unlock(&philo->mutexes->died_mutex);
+		running_philo(philo);
 		pthread_mutex_lock(&philo->meal_time_mutex);
 		if (philo->meals_goal > 0 && philo->meals_eaten >= philo->meals_goal)
 		{

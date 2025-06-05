@@ -6,7 +6,7 @@
 /*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 09:46:27 by jghattas          #+#    #+#             */
-/*   Updated: 2025/06/05 11:02:03 by jghattas         ###   ########.fr       */
+/*   Updated: 2025/06/05 14:32:39 by jghattas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@
 typedef struct s_fork
 {
 	pthread_mutex_t	mutex;
-	int				owner;			// philosopher id
-	int				dirty;			// 1 if dirty, 0 if clean
 }	t_fork;
 
 typedef struct s_mutexes
@@ -73,5 +71,5 @@ void	sleep_philo(t_philo *philo);
 
 int		check_dead(t_philo *philo, int i);
 void	destroy_mutexes(t_philo *philo, t_mutexes *mutexes, int count);
-
+int		is_dead(t_philo *philo);
 #endif
