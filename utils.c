@@ -6,7 +6,7 @@
 /*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 14:32:50 by jghattas          #+#    #+#             */
-/*   Updated: 2025/05/30 19:04:17 by jghattas         ###   ########.fr       */
+/*   Updated: 2025/06/05 10:04:42 by jghattas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ int	ft_atoi(const char *str)
 		result = result * 10 + (str[i] - '0');
 		i++;
 	}
+	if (str[i] != '\0')
+		return (-1);
 	return (result * sign);
 }
 
