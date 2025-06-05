@@ -6,7 +6,7 @@
 /*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 09:46:27 by jghattas          #+#    #+#             */
-/*   Updated: 2025/06/05 14:32:39 by jghattas         ###   ########.fr       */
+/*   Updated: 2025/06/05 15:25:16 by jghattas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,13 @@ typedef struct s_philo
 	size_t			meals_goal;
 	size_t			meals_eaten;
 	int				totalnbr;
-	int				died;
+	int				*died;
 }	t_philo;
 
 int		check_arg(int argc, char **argv);
 long	timestamp_ms(void);
 void	init_forks(t_fork *forks, int count);
-void	init_philos(t_philo *philos, t_fork *forks, int count);
+void	init_philos(t_philo *philos, t_fork *forks, int count, int *dead);
 void	init_philo_params(t_philo *philos, int count, int argc, char **argv);
 void	init_mutexes(t_philo *philo, t_mutexes *mutexes, int count);
 int		ft_atoi(const char *str);
@@ -64,7 +64,7 @@ void	*observer(void *arg);
 
 void	get_fork(t_philo *philo, t_fork *fork);
 void	check_forks(t_philo	*philo);
-void	smart_sleep(long duration_us, t_philo *philo);
+void	smart_sleep(long duration, t_philo *philo);
 void	eat(t_philo *philo);
 void	think(t_philo *philo);
 void	sleep_philo(t_philo *philo);

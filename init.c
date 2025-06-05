@@ -6,7 +6,7 @@
 /*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 13:48:12 by jghattas          #+#    #+#             */
-/*   Updated: 2025/06/05 11:30:47 by jghattas         ###   ########.fr       */
+/*   Updated: 2025/06/05 15:27:44 by jghattas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ long	timestamp_ms(void)
 	current_time = tv.tv_sec * 1000 + tv.tv_usec / 1000;
 	if (start_time == 0)
 		start_time = current_time;
+	// printf("\ntime === %ld\n\n", current_time - start_time);
 	return (current_time - start_time);
 }
 
@@ -37,7 +38,7 @@ void	init_forks(t_fork *forks, int count)
 	}
 }
 
-void	init_philos(t_philo *philos, t_fork *forks, int count)
+void	init_philos(t_philo *philos, t_fork *forks, int count, int *dead)
 {
 	int	i;
 
@@ -50,6 +51,7 @@ void	init_philos(t_philo *philos, t_fork *forks, int count)
 		philos[i].left_fork = &forks[i];
 		philos[i].right_fork = &forks[(i + 1) % count];
 		philos[i].totalnbr = count;
+		philos[i].died = dead;
 		i++;
 	}
 }
@@ -76,7 +78,6 @@ void	init_philo_params(t_philo *philos, int count, int argc, char **argv)
 		philos[i].time_to_eat = time_to_eat;
 		philos[i].time_to_sleep = time_to_sleep;
 		philos[i].meals_goal = meals_goal;
-		philos[i].died = 0;
 		i++;
 	}
 }
