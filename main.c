@@ -6,7 +6,7 @@
 /*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 13:47:58 by jghattas          #+#    #+#             */
-/*   Updated: 2025/06/05 10:08:23 by jghattas         ###   ########.fr       */
+/*   Updated: 2025/06/05 11:23:29 by jghattas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,20 +30,6 @@ int	check_arg(int argc, char **argv)
 	return (0);
 }
 
-void	create_mutexes(pthread_mutex_t *print_mutex, pthread_mutex_t *meal_time_mutex, pthread_mutex_t *died_mutex)
-{
-	pthread_mutex_init(print_mutex, NULL);
-	pthread_mutex_init(meal_time_mutex, NULL);
-	pthread_mutex_init(died_mutex, NULL);
-	
-}
-
-void	delete_mutexes(pthread_mutex_t *print_mutex, pthread_mutex_t *meal_time_mutex, pthread_mutex_t *died_mutex)
-{
-	pthread_mutex_destroy(print_mutex);
-	pthread_mutex_destroy(meal_time_mutex);
-	pthread_mutex_destroy(died_mutex);
-}
 void	create_threads(pthread_t *threads, t_philo *philos, int count)
 {
 	int	i;
@@ -78,28 +64,24 @@ int	main(int argc, char **argv)
 	pthread_t		threads[MAX_PHILOS];
 	t_philo			philos[MAX_PHILOS];
 	t_fork			forks[MAX_PHILOS];
-	pthread_t		monitor;
-	pthread_mutex_t	print_mutex;
-	pthread_mutex_t	meal_time_mutex;
-	pthread_mutex_t died_mutex;
+	t_mutexes		mutexes;
+	// pthread_t		monitor;
 	int				count;
-	int				died;
+	// int				died;
 
-	died = 0;
+	// died = 0;
 	if (check_arg(argc, argv) != 0)
 		return (printf ("Wrong Arguments Syntax\n"));
 	count = ft_atoi(argv[1]);
-	create_mutexes(&print_mutex, &meal_time_mutex, &died_mutex);
+	init_mutexes(philos, &mutexes, count);
 	init_forks(forks, count);
-	init_philos(philos, forks, count, &print_mutex, &meal_time_mutex);
-	init_philo_params(philos, count, argc, argv, &died_mutex, &died);
+	init_philos(philos, forks, count);
+	init_philo_params(philos, count, argc, argv);
 	create_threads(threads, philos, count);
-	pthread_create(&monitor, NULL, observer, (void *)philos);
+	// pthread_create(&monitor, NULL, observer, (void *)philos);
 	join_threads(threads, count);
-	pthread_join(monitor, NULL);
-	delete_mutexes(&print_mutex, &meal_time_mutex, &died_mutex);
+	// pthread_join(monitor, NULL);
+	destroy_mutexes(philos, &mutexes, count);
+	printf("hi");
 	return (0);
 }
-//note to fix arg_check for for example ./philo 2a 200 200b 200 2 it should not work but it does
-//./philo 1 800 200 200 in this case no second fork goes into infinite loop to fix!!
-// to fix timing issues during death ./philo 3 60 60 60 no deaths t should happen check deepseek

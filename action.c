@@ -6,7 +6,7 @@
 /*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 14:07:51 by jghattas          #+#    #+#             */
-/*   Updated: 2025/05/30 18:57:26 by jghattas         ###   ########.fr       */
+/*   Updated: 2025/06/05 11:07:55 by jghattas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@ void	check_forks(t_philo	*philo)
 	right_ready = 0;
 	while (1)
 	{
-		pthread_mutex_lock(philo->died_mutex);
-        if (*philo->died) {
-            pthread_mutex_unlock(philo->died_mutex);
+		pthread_mutex_lock(&philo->mutexes->died_mutex);
+        if (philo->died) {
+            pthread_mutex_unlock(&philo->mutexes->died_mutex);
             return;
         }
-        pthread_mutex_unlock(philo->died_mutex);
+        pthread_mutex_unlock(&philo->mutexes->died_mutex);
 		if (philo->left_fork->owner == philo->id)
 			left_ready = 1;
 		else if (philo->left_fork->dirty == 1)
@@ -61,42 +61,42 @@ void	smart_sleep(long duration_us, t_philo *philo)
     
     while ((elapsed = timestamp_ms() - start) < duration_us)
 	{
-        pthread_mutex_lock(philo->died_mutex);
-        if (*philo->died)
+        pthread_mutex_lock(&philo->mutexes->died_mutex);
+        if (philo->died)
 		{
-            pthread_mutex_unlock(philo->died_mutex);
+            pthread_mutex_unlock(&philo->mutexes->died_mutex);
             return ;
         }
-        pthread_mutex_unlock(philo->died_mutex);
+        pthread_mutex_unlock(&philo->mutexes->died_mutex);
     }
 }
 
 void	eat(t_philo *philo)
 {
-	pthread_mutex_lock(philo->meal_time_mutex);
+	pthread_mutex_lock(&philo->meal_time_mutex);
 	philo->last_meal_time = timestamp_ms();
-	pthread_mutex_unlock(philo->meal_time_mutex);
+	pthread_mutex_unlock(&philo->meal_time_mutex);
 	print_state(philo, "is eating");
-	pthread_mutex_lock(philo->meal_time_mutex);
+	pthread_mutex_lock(&philo->meal_time_mutex);
 	philo->meals_eaten++;
-	pthread_mutex_unlock(philo->meal_time_mutex);
+	pthread_mutex_unlock(&philo->meal_time_mutex);
 	philo->left_fork->dirty = 1;
 	philo->right_fork->dirty = 1;
 	smart_sleep(philo->time_to_eat, philo);
-	pthread_mutex_lock(philo->meal_time_mutex);
+	pthread_mutex_lock(&philo->meal_time_mutex);
 	philo->last_meal_time = timestamp_ms();
-	pthread_mutex_unlock(philo->meal_time_mutex);
+	pthread_mutex_unlock(&philo->meal_time_mutex);
 }
 
 void	think(t_philo *philo)
 {
-	pthread_mutex_lock(philo->died_mutex);
-    if (*philo->died)
+	pthread_mutex_lock(&philo->mutexes->died_mutex);
+    if (philo->died)
 	{
-        pthread_mutex_unlock(philo->died_mutex);
+        pthread_mutex_unlock(&philo->mutexes->died_mutex);
         return ;
     }
-    pthread_mutex_unlock(philo->died_mutex);
+    pthread_mutex_unlock(&philo->mutexes->died_mutex);
 	print_state(philo, "is thinking");
 }
 

@@ -6,7 +6,7 @@
 /*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 13:48:12 by jghattas          #+#    #+#             */
-/*   Updated: 2025/05/30 18:57:42 by jghattas         ###   ########.fr       */
+/*   Updated: 2025/06/05 11:02:32 by jghattas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,11 @@ void	init_forks(t_fork *forks, int count)
 	while (i < count)
 	{
 		pthread_mutex_init(&forks[i].mutex, NULL);
-		forks[i].owner = i + 1;
-		forks[i].dirty = 1;
 		i++;
 	}
 }
 
-void	init_philos(t_philo *philos, t_fork *forks, int count,
-	pthread_mutex_t *print_mutex, pthread_mutex_t *meal_time_mutex)
+void	init_philos(t_philo *philos, t_fork *forks, int count)
 {
 	int	i;
 
@@ -53,14 +50,14 @@ void	init_philos(t_philo *philos, t_fork *forks, int count,
 		philos[i].meals_eaten = 0;
 		philos[i].left_fork = &forks[i];
 		philos[i].right_fork = &forks[(i + 1) % count];
-		philos[i].print_mutex = print_mutex;
-		philos[i].meal_time_mutex = meal_time_mutex;
+		// philos[i].print_mutex = print_mutex;
+		// philos[i].meal_time_mutex = meal_time_mutex;
 		philos[i].totalnbr = count;
 		i++;
 	}
 }
 
-void	init_philo_params(t_philo *philos, int count, int argc, char **argv, pthread_mutex_t *died_mutex, int *died)
+void	init_philo_params(t_philo *philos, int count, int argc, char **argv)
 {
 	int		i;
 	size_t	time_to_die;
@@ -82,8 +79,38 @@ void	init_philo_params(t_philo *philos, int count, int argc, char **argv, pthrea
 		philos[i].time_to_eat = time_to_eat;
 		philos[i].time_to_sleep = time_to_sleep;
 		philos[i].meals_goal = meals_goal;
-		philos[i].died = died;
-		philos[i].died_mutex = died_mutex;
+		philos[i].died = 0;
 		i++;
 	}
+}
+
+void	init_mutexes(t_philo *philo, t_mutexes *mutexes, int count)
+{
+	int i;
+
+	i = 0;
+	while ( i < count)
+	{
+		
+		pthread_mutex_init(&philo[i].meal_time_mutex, NULL);
+		philo[i].mutexes = mutexes;
+		i++;
+	}
+	pthread_mutex_init(&mutexes->print_mutex, NULL);
+	pthread_mutex_init(&mutexes->died_mutex, NULL);
+}
+
+void	destroy_mutexes(t_philo *philo, t_mutexes *mutexes, int count)
+{
+	int i;
+
+	i = 0;
+	while ( i < count)
+	{
+		
+		pthread_mutex_destroy(&philo[i].meal_time_mutex);
+		i++;
+	}
+	pthread_mutex_destroy(&mutexes->print_mutex);
+	pthread_mutex_destroy(&mutexes->died_mutex);
 }

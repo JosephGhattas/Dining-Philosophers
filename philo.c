@@ -6,7 +6,7 @@
 /*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 09:04:02 by jghattas          #+#    #+#             */
-/*   Updated: 2025/05/30 19:56:17 by jghattas         ###   ########.fr       */
+/*   Updated: 2025/06/05 11:21:20 by jghattas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,16 @@
 
 void	print_state(t_philo *philo, const char *state)
 {
-	pthread_mutex_lock(philo->died_mutex);
-	if (*(philo->died) == 1)
+	pthread_mutex_lock(&philo->mutexes->died_mutex);
+	if (philo->died == 1)
 	{
-		pthread_mutex_unlock(philo->died_mutex);
+		pthread_mutex_unlock(&philo->mutexes->died_mutex);
 		return ;
 	}
-	pthread_mutex_unlock(philo->died_mutex);
-	pthread_mutex_lock(philo->print_mutex);
+	pthread_mutex_unlock(&philo->mutexes->died_mutex);
+	pthread_mutex_lock(&philo->mutexes->print_mutex);
 	printf("%ld ms Philospher %d %s\n", timestamp_ms(), philo->id, state);
-	pthread_mutex_unlock(philo->print_mutex);
+	pthread_mutex_unlock(&philo->mutexes->print_mutex);
 }
 
 void *observer(void *arg)
@@ -39,9 +39,9 @@ void *observer(void *arg)
 		i = 0;
 		while (i < count)
 		{
-			pthread_mutex_lock(philo[i].meal_time_mutex);
+			pthread_mutex_lock(&philo[i].meal_time_mutex);
 			flag = check_dead(philo, i);
-			pthread_mutex_unlock(philo[i].meal_time_mutex);
+			pthread_mutex_unlock(&philo[i].meal_time_mutex);
 			if (flag == 1)
 				break;
 			i++;
@@ -80,20 +80,20 @@ void	*philo_routine(void *arg)
 	while (1)
 	{
 		running_philo(philo);
-		pthread_mutex_lock(philo->died_mutex);
-		if (*(philo->died) == 1)
+		pthread_mutex_lock(&philo->mutexes->died_mutex);
+		if ((philo->died) == 1)
 		{
-			pthread_mutex_unlock(philo->died_mutex);
+			pthread_mutex_unlock(&philo->mutexes->died_mutex);
 			break;
 		}
-		pthread_mutex_unlock(philo->died_mutex);
-		pthread_mutex_lock(philo->meal_time_mutex);
+		pthread_mutex_unlock(&philo->mutexes->died_mutex);
+		pthread_mutex_lock(&philo->meal_time_mutex);
 		if (philo->meals_goal > 0 && philo->meals_eaten >= philo->meals_goal)
 		{
-			pthread_mutex_unlock(philo->meal_time_mutex);
+			pthread_mutex_unlock(&philo->meal_time_mutex);
 			break ;
 		}
-		pthread_mutex_unlock(philo->meal_time_mutex);
+		pthread_mutex_unlock(&philo->meal_time_mutex);
 	}
 	return (NULL);
 } 
