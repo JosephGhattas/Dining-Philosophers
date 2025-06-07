@@ -6,7 +6,7 @@
 /*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 09:46:27 by jghattas          #+#    #+#             */
-/*   Updated: 2025/06/05 16:44:28 by jghattas         ###   ########.fr       */
+/*   Updated: 2025/06/07 08:08:08 by jghattas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,17 @@ typedef struct s_philo
 	int				*died;
 }	t_philo;
 
+typedef struct s_init
+{
+	pthread_t	threads[MAX_PHILOS];
+	t_philo		philos[MAX_PHILOS];
+	t_fork		forks[MAX_PHILOS];
+	t_mutexes	mutexes;
+	pthread_t	monitor;
+	int			count;
+	int			died;
+}	t_init;
+
 int		check_arg(int argc, char **argv);
 long	timestamp_ms(void);
 int		ft_atoi(const char *str);
@@ -71,5 +82,6 @@ void	sleep_philo(t_philo *philo);
 
 int		check_dead(t_philo *philo, int i);
 int		is_dead(t_philo *philo);
+int		kill_philo(t_philo *philo, int i, size_t curr_time);
 
 #endif

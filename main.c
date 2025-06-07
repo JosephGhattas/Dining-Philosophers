@@ -6,29 +6,11 @@
 /*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 13:47:58 by jghattas          #+#    #+#             */
-/*   Updated: 2025/06/05 16:35:03 by jghattas         ###   ########.fr       */
+/*   Updated: 2025/06/07 08:10:32 by jghattas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-int	check_arg(int argc, char **argv)
-{
-	int	num_philos;
-
-	if (argc != 5 && argc != 6)
-		return (printf ("Enter Correct Number of Arguments\n"), 1);
-	num_philos = ft_atoi(argv[1]);
-	if (num_philos <= 1 || num_philos > MAX_PHILOS)
-		return (printf ("Unacceptable Number of Philosophers\n"), 1);
-	if (ft_atoi(argv[2]) < 0)
-		return (printf ("Invalid time argument: time must be positive\n"), 1);
-	if (argc == 6 && (ft_atoi(argv[5]) < 0))
-		return (printf ("Unacceptable value for the number of meals\n"), 1);
-	if (ft_atoi(argv[3]) < 0 || ft_atoi(argv[4]) < 0)
-		return (1);
-	return (0);
-}
 
 void	create_threads(pthread_t *threads, t_philo *philos, int count)
 {
@@ -58,28 +40,33 @@ void	join_threads(pthread_t *threads, int count)
 	}
 }
 
+void	init_all(t_init *init, int argc, char **argv)
+{
+	init->died = 0;
+	init->count = ft_atoi(argv[1]);
+	init_mutexes(init->philos, &init->mutexes, init->count);
+	init_forks(init->forks, init->count);
+	init_philos(init->philos, init->forks, init->count, &init->died);
+	init_philo_params(init->philos, init->count, argc, argv);
+}
+
+void	start_threads(t_init	*init)
+{
+	create_threads(init->threads, init->philos, init->count);
+	pthread_create(&init->monitor, NULL, observer, (void *)init->philos);
+	join_threads(init->threads, init->count);
+	pthread_join(init->monitor, NULL);
+}
+
 int	main(int argc, char **argv)
 {
-	pthread_t		threads[MAX_PHILOS];
-	t_philo			philos[MAX_PHILOS];
-	t_fork			forks[MAX_PHILOS];
-	t_mutexes		mutexes;
-	pthread_t		monitor;
-	int				count;
-	int				died;
+	t_init	init;
 
-	died = 0;
 	if (check_arg(argc, argv) != 0)
 		return (printf ("Wrong Arguments Syntax\n"));
-	count = ft_atoi(argv[1]);
-	init_mutexes(philos, &mutexes, count);
-	init_forks(forks, count);
-	init_philos(philos, forks, count, &died);
-	init_philo_params(philos, count, argc, argv);
-	create_threads(threads, philos, count);
-	pthread_create(&monitor, NULL, observer, (void *)philos);
-	join_threads(threads, count);
-	pthread_join(monitor, NULL);
-	destroy_mutexes(philos, &mutexes, count);
+	init_all(&init, argc, argv);
+	start_threads(&init);
+	printf("\nmeals = %ld\n", init.philos->meals_eaten);
+	destroy_mutexes(init.philos, &init.mutexes, init.count);
 	return (0);
 }
