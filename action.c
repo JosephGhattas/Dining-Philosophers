@@ -25,6 +25,50 @@ long	timestamp_ms(void)
 	return (current_time - start_time);
 }
 
+int	forks_lock(t_philo *philo)
+{
+	int	check_r;
+	int	check_l;
+	int	id;
+
+	check_r = 0;
+	check_l = 0;
+	id = philo->id;
+	if (id % 2 == 0)
+	{
+		if (pthread_mutex_lock(&philo->left_fork->mutex) == 0)
+		{
+			check_l++;
+			print_state(philo, "has taken left fork");
+		}
+		if (pthread_mutex_lock(&philo->right_fork->mutex) == 0)
+		{	
+			check_r++;
+			print_state(philo, "has taken right fork");
+		}
+	}
+	else
+	{
+		if (pthread_mutex_lock(&philo->right_fork->mutex) == 0)
+		{	
+			check_r++;
+			print_state(philo, "has taken right fork");
+		}
+		if (pthread_mutex_lock(&philo->left_fork->mutex) == 0)
+		{
+			check_l++;
+			print_state(philo, "has taken left fork");
+		}
+	}
+	if ((check_l + check_r) < 2)
+	{	
+		if (check_r == 1)
+			pthread_mutex_unlock(&philo->right_fork->mutex);
+		if (check_l == 1)
+			pthread_mutex_unlock(&philo->left_fork->mutex);
+	}
+	return (check_l + check_r);
+}
 void	eat(t_philo *philo)
 {
 	if (is_dead(philo) == -1)
@@ -47,6 +91,7 @@ void	think(t_philo *philo)
 	if (is_dead(philo) == -1)
 		return ;
 	print_state(philo, "is thinking");
+	usleep(100);
 }
 
 void	sleep_philo(t_philo *philo)

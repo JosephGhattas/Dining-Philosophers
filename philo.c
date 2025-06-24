@@ -51,23 +51,12 @@ void	running_philo(t_philo *philo)
 	think(philo);
 	if (is_dead(philo) == -1)
 		return ;
-	if (philo->id % 2 == 0)
+	if (forks_lock(philo) == 2)
 	{
-		pthread_mutex_lock(&philo->left_fork->mutex);
-		print_state(philo, "has taken left fork");
-		pthread_mutex_lock(&philo->right_fork->mutex);
-		print_state(philo, "has taken right fork");
+		eat(philo);
+		pthread_mutex_unlock(&philo->left_fork->mutex);
+		pthread_mutex_unlock(&philo->right_fork->mutex);
 	}
-	else
-	{
-		pthread_mutex_lock(&philo->right_fork->mutex);
-		print_state(philo, "has taken right fork");
-		pthread_mutex_lock(&philo->left_fork->mutex);
-		print_state(philo, "has taken left fork");
-	}
-	eat(philo);
-	pthread_mutex_unlock(&philo->left_fork->mutex);
-	pthread_mutex_unlock(&philo->right_fork->mutex);
 	sleep_philo(philo);
 }
 

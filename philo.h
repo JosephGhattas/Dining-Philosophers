@@ -79,6 +79,7 @@ void	*observer(void *arg);
 void	eat(t_philo *philo);
 void	think(t_philo *philo);
 void	sleep_philo(t_philo *philo);
+int		forks_lock(t_philo *philo);
 
 int		check_dead(t_philo *philo, int i);
 int		is_dead(t_philo *philo);
