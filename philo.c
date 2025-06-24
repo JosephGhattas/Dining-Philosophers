@@ -6,7 +6,7 @@
 /*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 09:04:02 by jghattas          #+#    #+#             */
-/*   Updated: 2025/06/24 11:47:24 by jghattas         ###   ########.fr       */
+/*   Updated: 2025/06/24 12:02:29 by jghattas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	*observer(void *arg)
 	count = philo[0].totalnbr;
 	while (1)
 	{
-		usleep(1000);
+		usleep(100);
 		i = 0;
 		while (i < count)
 		{
@@ -49,13 +49,11 @@ void	*observer(void *arg)
 
 void	running_philo(t_philo *philo)
 {
-	usleep(100);
 	think(philo);
 	while (forks_lock(philo) < 3)
 	{
 		if (is_dead(philo) == -1)
 			return ;
-		usleep(100);
 	}
 	eat(philo);
 	pthread_mutex_unlock(&philo->left_fork->mutex);

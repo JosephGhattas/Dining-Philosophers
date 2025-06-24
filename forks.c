@@ -6,7 +6,7 @@
 /*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 11:49:09 by jghattas          #+#    #+#             */
-/*   Updated: 2025/06/24 11:51:37 by jghattas         ###   ########.fr       */
+/*   Updated: 2025/06/24 12:45:53 by jghattas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ int	forks_lock(t_philo *philo)
 			pthread_mutex_unlock(&philo->right_fork->mutex);
 		if (locked == 1)
 			pthread_mutex_unlock(&philo->left_fork->mutex);
+		usleep(100);
 	}
 	return (locked);
 }
