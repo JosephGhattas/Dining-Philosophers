@@ -6,7 +6,7 @@
 /*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 14:07:51 by jghattas          #+#    #+#             */
-/*   Updated: 2025/06/05 16:41:20 by jghattas         ###   ########.fr       */
+/*   Updated: 2025/06/24 10:58:18 by jghattas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,13 @@ int	forks_lock(t_philo *philo)
 		{
 			check_l++;
 			print_state(philo, "has taken left fork");
+
 		}
 		if (pthread_mutex_lock(&philo->right_fork->mutex) == 0)
 		{	
 			check_r++;
-			print_state(philo, "has taken right fork");
+			print_state(philo, "has taken right fork");;
+
 		}
 	}
 	else
@@ -53,6 +55,8 @@ int	forks_lock(t_philo *philo)
 		{	
 			check_r++;
 			print_state(philo, "has taken right fork");
+
+
 		}
 		if (pthread_mutex_lock(&philo->left_fork->mutex) == 0)
 		{
@@ -75,15 +79,13 @@ void	eat(t_philo *philo)
 		return ;
 	pthread_mutex_lock(&philo->meal_time_mutex);
 	philo->last_meal_time = timestamp_ms();
+	usleep(100);
 	pthread_mutex_unlock(&philo->meal_time_mutex);
 	print_state(philo, "is eating");
 	pthread_mutex_lock(&philo->meal_time_mutex);
 	philo->meals_eaten++;
 	pthread_mutex_unlock(&philo->meal_time_mutex);
 	usleep(philo->time_to_eat * 1000);
-	pthread_mutex_lock(&philo->meal_time_mutex);
-	philo->last_meal_time = timestamp_ms();
-	pthread_mutex_unlock(&philo->meal_time_mutex);
 }
 
 void	think(t_philo *philo)
