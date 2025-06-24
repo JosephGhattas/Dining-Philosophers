@@ -6,7 +6,7 @@
 /*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 13:47:58 by jghattas          #+#    #+#             */
-/*   Updated: 2025/06/07 08:10:32 by jghattas         ###   ########.fr       */
+/*   Updated: 2025/06/24 11:52:37 by jghattas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ int	main(int argc, char **argv)
 		return (printf ("Wrong Arguments Syntax\n"));
 	init_all(&init, argc, argv);
 	start_threads(&init);
-	printf("\nmeals = %ld\n", init.philos->meals_eaten);
 	destroy_mutexes(init.philos, &init.mutexes, init.count);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: jghattas <jghattas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 09:04:02 by jghattas          #+#    #+#             */
-/*   Updated: 2025/06/24 10:59:27 by jghattas         ###   ########.fr       */
+/*   Updated: 2025/06/24 11:47:24 by jghattas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	running_philo(t_philo *philo)
 {
 	usleep(100);
 	think(philo);
-	while (forks_lock(philo) < 2)
+	while (forks_lock(philo) < 3)
 	{
 		if (is_dead(philo) == -1)
 			return ;
@@ -80,7 +80,6 @@ void	*philo_routine(void *arg)
 			break ;
 		}
 		pthread_mutex_unlock(&philo->meal_time_mutex);
-		
 	}
 	return (NULL);
 }
