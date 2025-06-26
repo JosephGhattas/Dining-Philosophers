@@ -46,7 +46,7 @@ int	check_arg(int argc, char **argv)
 	if (argc < 5 || argc > 6)
 		return (printf ("Enter Correct Number of Arguments\n"), 1);
 	num_philos = ft_atoi(argv[1]);
-	if (num_philos <= 1 || num_philos > MAX_PHILOS)
+	if (num_philos < 1 || num_philos > MAX_PHILOS)
 		return (printf ("Unacceptable Number of Philosophers\n"), 1);
 	if (ft_atoi(argv[2]) < 0)
 		return (printf ("Invalid time argument: time must be positive\n"), 1);
@@ -59,7 +59,7 @@ int	check_arg(int argc, char **argv)
 
 int	kill_philo(t_philo *philo, int i)
 {
-	long curr_time;
+	long	curr_time;
 
 	curr_time = (timestamp_ms() - philo->start_time);
 	*(philo->died) = 1;
@@ -79,9 +79,8 @@ int	check_dead(t_philo *philo, int i)
 	curr_time = (timestamp_ms() - philo->start_time);
 	time_since_meal = curr_time - philo[i].last_meal_time;
 	if (curr_time < philo[i].last_meal_time)
-	{
-    	printf("\n\nWARNING: time went backwards! curr=%ld, last_meal=%ld\n\n\n", curr_time, philo[i].last_meal_time);
-	}
+		printf("\nWARNING: time went backwards! curr=%ld, last_meal=%ld\n\n",
+			curr_time, philo[i].last_meal_time);
 	pthread_mutex_unlock(&philo[i].meal_time_mutex);
 	if (time_since_meal > philo[i].time_to_die)
 	{

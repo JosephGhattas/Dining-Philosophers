@@ -32,7 +32,7 @@ void	smart_sleep(size_t time_in_ms)
 	{
 		now = timestamp_ms();
 		if ((now - start) >= (long)time_in_ms)
-			break;
+			break ;
 		usleep(500);
 	}
 }
@@ -43,13 +43,11 @@ void	eat(t_philo *philo)
 		return ;
 	pthread_mutex_lock(&philo->meal_time_mutex);
 	philo->last_meal_time = (timestamp_ms() - philo->start_time);
-	// usleep(100);
 	pthread_mutex_unlock(&philo->meal_time_mutex);
 	print_state(philo, "is eating");
 	pthread_mutex_lock(&philo->meal_time_mutex);
 	philo->meals_eaten++;
 	pthread_mutex_unlock(&philo->meal_time_mutex);
-	// usleep(philo->time_to_eat * 1000);
 	smart_sleep(philo->time_to_eat);
 }
 
@@ -65,6 +63,5 @@ void	sleep_philo(t_philo *philo)
 	if (is_dead(philo) == -1)
 		return ;
 	print_state(philo, "is sleeping");
-	// usleep(philo->time_to_sleep * 1000);
 	smart_sleep(philo->time_to_sleep);
 }
