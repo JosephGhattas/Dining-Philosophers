@@ -78,21 +78,17 @@ int	check_dead(t_philo *philo, int i)
 	pthread_mutex_lock(&philo[i].meal_time_mutex);
 	curr_time = (timestamp_ms() - philo->start_time);
 	time_since_meal = curr_time - philo[i].last_meal_time;
-	if (curr_time < philo[i].last_meal_time)
-		printf("\nWARNING: time went backwards! curr=%ld, last_meal=%ld\n\n",
-			curr_time, philo[i].last_meal_time);
-	pthread_mutex_unlock(&philo[i].meal_time_mutex);
 	if (time_since_meal > philo[i].time_to_die)
 	{
-		pthread_mutex_lock(&philo[i].mutexes->died_mutex);
+		pthread_mutex_unlock(&philo[i].meal_time_mutex);
+		pthread_mutex_lock(&philo->mutexes->died_mutex);
 		if ((*(philo->died)) == 0)
 			return (kill_philo(philo, i));
-		pthread_mutex_unlock(&philo[i].mutexes->died_mutex);
+		pthread_mutex_unlock(&philo->mutexes->died_mutex);
 	}
-	pthread_mutex_lock(&philo[i].meal_time_mutex);
-	if (philo->meals_goal > 0 && philo->meals_eaten >= philo->meals_goal)
+	if (philo->meals_goal > 0 && philo[i].meals_eaten >= philo->meals_goal)
 	{
-		pthread_mutex_unlock(&philo->meal_time_mutex);
+		pthread_mutex_unlock(&philo[i].meal_time_mutex);
 		return (1);
 	}
 	pthread_mutex_unlock(&philo[i].meal_time_mutex);

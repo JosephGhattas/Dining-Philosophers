@@ -43,11 +43,9 @@ void	eat(t_philo *philo)
 		return ;
 	pthread_mutex_lock(&philo->meal_time_mutex);
 	philo->last_meal_time = (timestamp_ms() - philo->start_time);
-	pthread_mutex_unlock(&philo->meal_time_mutex);
-	print_state(philo, "is eating");
-	pthread_mutex_lock(&philo->meal_time_mutex);
 	philo->meals_eaten++;
 	pthread_mutex_unlock(&philo->meal_time_mutex);
+	print_state(philo, "is eating");
 	smart_sleep(philo->time_to_eat);
 }
 
