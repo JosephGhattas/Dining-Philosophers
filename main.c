@@ -46,7 +46,7 @@ void	init_all(t_init *init, int argc, char **argv)
 	init->count = ft_atoi(argv[1]);
 	init_mutexes(init->philos, &init->mutexes, init->count);
 	init_forks(init->forks, init->count);
-	init_philos(init->philos, init->forks, init->count, &init->died, init->start_time);
+	init_philos(init);
 	init_philo_params(init->philos, init->count, argc, argv);
 }
 

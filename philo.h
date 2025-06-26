@@ -69,7 +69,7 @@ void	print_state(t_philo *philo, const char *state);
 void	smart_sleep(size_t time_in_ms);
 
 void	init_forks(t_fork *forks, int count);
-void	init_philos(t_philo *philos, t_fork *forks, int count, int *dead, long start_time);
+void	init_philos(t_init *init);
 void	init_philo_params(t_philo *philos, int count, int argc, char **argv);
 
 void	init_mutexes(t_philo *philo, t_mutexes *mutexes, int count);
