@@ -17,7 +17,7 @@ void	print_state(t_philo *philo, const char *state)
 	if (is_dead(philo) == -1)
 		return ;
 	pthread_mutex_lock(&philo->mutexes->print_mutex);
-	printf("%ld ms Philospher %d %s\n", timestamp_ms(), philo->id, state);
+	printf("%ld ms Philospher %d %s\n", (timestamp_ms() - philo->start_time), philo->id, state);
 	pthread_mutex_unlock(&philo->mutexes->print_mutex);
 }
 

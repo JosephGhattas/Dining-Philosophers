@@ -47,6 +47,7 @@ typedef struct s_philo
 	size_t			meals_eaten;
 	int				totalnbr;
 	int				*died;
+	long			start_time;
 }	t_philo;
 
 typedef struct s_init
@@ -58,6 +59,7 @@ typedef struct s_init
 	pthread_t	monitor;
 	int			count;
 	int			died;
+	long		start_time;
 }	t_init;
 
 int		check_arg(int argc, char **argv);
@@ -67,7 +69,7 @@ void	print_state(t_philo *philo, const char *state);
 void	smart_sleep(size_t time_in_ms);
 
 void	init_forks(t_fork *forks, int count);
-void	init_philos(t_philo *philos, t_fork *forks, int count, int *dead);
+void	init_philos(t_philo *philos, t_fork *forks, int count, int *dead, long start_time);
 void	init_philo_params(t_philo *philos, int count, int argc, char **argv);
 
 void	init_mutexes(t_philo *philo, t_mutexes *mutexes, int count);
@@ -84,7 +86,7 @@ int		forks_lock(t_philo *philo);
 
 int		check_dead(t_philo *philo, int i);
 int		is_dead(t_philo *philo);
-int		kill_philo(t_philo *philo, int i, size_t curr_time);
+int		kill_philo(t_philo *philo, int i);
 
-int	hungriest(t_philo *philo);
+int		hungriest(t_philo *philo);
 #endif

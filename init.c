@@ -24,7 +24,7 @@ void	init_forks(t_fork *forks, int count)
 	}
 }
 
-void	init_philos(t_philo *philos, t_fork *forks, int count, int *dead)
+void	init_philos(t_philo *philos, t_fork *forks, int count, int *dead, long start_time)
 {
 	int	i;
 
@@ -32,7 +32,8 @@ void	init_philos(t_philo *philos, t_fork *forks, int count, int *dead)
 	while (i < count)
 	{
 		philos[i].id = i + 1;
-		philos[i].last_meal_time = timestamp_ms();
+		philos[i].start_time = start_time;
+		philos[i].last_meal_time = (timestamp_ms() - start_time);
 		philos[i].meals_eaten = 0;
 		philos[i].left_fork = &forks[i];
 		philos[i].right_fork = &forks[(i + 1) % count];

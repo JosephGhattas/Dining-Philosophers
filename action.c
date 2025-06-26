@@ -14,15 +14,12 @@
 
 long	timestamp_ms(void)
 {
-	static long		start_time = 0;
 	long			current_time;
 	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
 	current_time = tv.tv_sec * 1000 + tv.tv_usec / 1000;
-	if (start_time == 0)
-		start_time = current_time;
-	return (current_time - start_time);
+	return (current_time);
 }
 
 void	smart_sleep(size_t time_in_ms)
@@ -36,6 +33,7 @@ void	smart_sleep(size_t time_in_ms)
 		now = timestamp_ms();
 		if ((now - start) >= (long)time_in_ms)
 			break;
+		usleep(500);
 	}
 }
 
@@ -44,8 +42,8 @@ void	eat(t_philo *philo)
 	if (is_dead(philo) == -1)
 		return ;
 	pthread_mutex_lock(&philo->meal_time_mutex);
-	philo->last_meal_time = timestamp_ms();
-	usleep(00);
+	philo->last_meal_time = (timestamp_ms() - philo->start_time);
+	// usleep(100);
 	pthread_mutex_unlock(&philo->meal_time_mutex);
 	print_state(philo, "is eating");
 	pthread_mutex_lock(&philo->meal_time_mutex);

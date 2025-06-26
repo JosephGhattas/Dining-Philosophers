@@ -20,7 +20,7 @@ int	hungriest(t_philo *philo)
 	int		hungry_philo;
 
 	i = 0;
-	curr_time = timestamp_ms();
+	curr_time = (timestamp_ms() - philo->start_time);
 	pthread_mutex_lock(&philo[0].meal_time_mutex);
 	max_diff = curr_time - philo[0].last_meal_time;
 	pthread_mutex_unlock(&philo[0].meal_time_mutex);
@@ -84,7 +84,7 @@ int	forks_lock(t_philo *philo)
 	int	locked;
 
 	if (hungriest(philo) != philo->id)
-		usleep(100);
+		usleep(500);
 	locked = 0;
 	if (philo->id % 2 == 0)
 		locked = even_forks(philo);
@@ -96,7 +96,7 @@ int	forks_lock(t_philo *philo)
 			pthread_mutex_unlock(&philo->right_fork->mutex);
 		if (locked == 1)
 			pthread_mutex_unlock(&philo->left_fork->mutex);
-		usleep(200);
+		// usleep(200);
 	}
 	return (locked);
 }

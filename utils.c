@@ -57,8 +57,11 @@ int	check_arg(int argc, char **argv)
 	return (0);
 }
 
-int	kill_philo(t_philo *philo, int i, size_t curr_time)
+int	kill_philo(t_philo *philo, int i)
 {
+	long curr_time;
+
+	curr_time = (timestamp_ms() - philo->start_time);
 	*(philo->died) = 1;
 	pthread_mutex_lock(&philo[i].mutexes->print_mutex);
 	printf("%ld ms philosopher %d died\n", curr_time, philo[i].id);
@@ -69,18 +72,22 @@ int	kill_philo(t_philo *philo, int i, size_t curr_time)
 
 int	check_dead(t_philo *philo, int i)
 {
-	size_t	curr_time;
+	long	curr_time;
 	size_t	time_since_meal;
 
-	curr_time = timestamp_ms();
 	pthread_mutex_lock(&philo[i].meal_time_mutex);
+	curr_time = (timestamp_ms() - philo->start_time);
 	time_since_meal = curr_time - philo[i].last_meal_time;
+	if (curr_time < philo[i].last_meal_time)
+	{
+    	printf("\n\nWARNING: time went backwards! curr=%ld, last_meal=%ld\n\n\n", curr_time, philo[i].last_meal_time);
+	}
 	pthread_mutex_unlock(&philo[i].meal_time_mutex);
 	if (time_since_meal > philo[i].time_to_die)
 	{
 		pthread_mutex_lock(&philo[i].mutexes->died_mutex);
 		if ((*(philo->died)) == 0)
-			return (kill_philo(philo, i, curr_time));
+			return (kill_philo(philo, i));
 		pthread_mutex_unlock(&philo[i].mutexes->died_mutex);
 	}
 	pthread_mutex_lock(&philo[i].meal_time_mutex);
