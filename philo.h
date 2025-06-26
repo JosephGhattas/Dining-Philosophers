@@ -19,7 +19,7 @@
 # include <unistd.h>
 # include <sys/time.h>
 
-# define MAX_PHILOS 250
+# define MAX_PHILOS 200
 
 typedef struct s_fork
 {

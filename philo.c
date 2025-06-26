@@ -32,7 +32,7 @@ void	*observer(void *arg)
 	count = philo[0].totalnbr;
 	while (1)
 	{
-		usleep(100);
+		usleep(1000);
 		i = 0;
 		while (i < count)
 		{
