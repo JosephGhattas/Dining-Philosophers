@@ -64,6 +64,7 @@ int	main(int argc, char **argv)
 
 	if (check_arg(argc, argv) != 0)
 		return (printf ("Wrong Arguments Syntax\n"));
+	timestamp_ms();
 	init_all(&init, argc, argv);
 	start_threads(&init);
 	destroy_mutexes(init.philos, &init.mutexes, init.count);

@@ -71,6 +71,7 @@ void	*philo_routine(void *arg)
 		if (is_dead(philo) == -1)
 			break ;
 		running_philo(philo);
+		// printf("meals = %ld\n", philo->meals_eaten);
 		pthread_mutex_lock(&philo->meal_time_mutex);
 		if (philo->meals_goal > 0 && philo->meals_eaten >= philo->meals_goal)
 		{

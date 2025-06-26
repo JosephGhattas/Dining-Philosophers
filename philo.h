@@ -64,6 +64,7 @@ int		check_arg(int argc, char **argv);
 long	timestamp_ms(void);
 int		ft_atoi(const char *str);
 void	print_state(t_philo *philo, const char *state);
+void	smart_sleep(size_t time_in_ms);
 
 void	init_forks(t_fork *forks, int count);
 void	init_philos(t_philo *philos, t_fork *forks, int count, int *dead);
@@ -85,4 +86,5 @@ int		check_dead(t_philo *philo, int i);
 int		is_dead(t_philo *philo);
 int		kill_philo(t_philo *philo, int i, size_t curr_time);
 
+int	hungriest(t_philo *philo);
 #endif
