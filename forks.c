@@ -57,13 +57,6 @@ int	forks_lock(t_philo *philo)
 {
 	int	locked;
 
-	if (philo->totalnbr == 1)
-	{
-		pthread_mutex_lock(&philo->right_fork->mutex);
-		print_state(philo, "has taken right fork");
-		usleep((philo->time_to_die * 1000) + 10000);
-		return (3);
-	}
 	locked = 0;
 	if (philo->id % 2 == 0)
 		locked = even_forks(philo);
