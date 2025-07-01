@@ -56,9 +56,9 @@ void	running_philo(t_philo *philo)
 		pthread_mutex_lock(&philo->left_fork->mutex);
 		print_state(philo, "has taken left fork");
 		while (is_dead(philo) == 0)
-            usleep(100);
-        pthread_mutex_unlock(&philo->left_fork->mutex);
-		return ; 
+			usleep(100);
+		pthread_mutex_unlock(&philo->left_fork->mutex);
+		return ;
 	}
 	while (forks_lock(philo) < 3)
 	{
